@@ -38,7 +38,7 @@ jobs:
             echo "Container is already running."
           elif [ "$(docker ps -aq -f name=sncf_analysis_container)" ]; then
             echo "Container exists but is stopped. Restarting it."
-            docker start sncf_analysis_container
+            docker restart sncf_analysis_container
           else
             echo "Container does not exist. Creating and starting a new container."
             docker run -d --name sncf_analysis_container sncf_analysis  # Utilise l'image Docker
