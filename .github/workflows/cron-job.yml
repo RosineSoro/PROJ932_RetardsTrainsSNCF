@@ -2,7 +2,7 @@ name: Run Docker Task
 
 on:
   schedule:
-    - cron: '20 10 * * *'  # Planifie à 10h05 UTC chaque jour
+    - cron: '05 11 * * *'  # Planifie à 10h05 UTC chaque jour
 
 jobs:
   build-and-run-docker:
@@ -41,5 +41,5 @@ jobs:
             docker restart sncf_analysis_container
           else
             echo "Container does not exist. Creating and starting a new container."
-            docker run -d --name sncf_analysis_container sncf_analysis  # Utilise l'image Docker
+            docker run -d --name sncf_analysis_container rosinesoro/sncf_analysis:latest  # Utilise l'image Docker
           fi
