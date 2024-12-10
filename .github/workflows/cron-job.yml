@@ -2,14 +2,36 @@ name: Run Docker Task
 
 on:
   schedule:
-    - cron: '15 09 * * *' # Planifie à 09h15 UTC chaque jour
+    - cron: '05 10 * * *'  # Planifie à 10h05 UTC chaque jour
 
 jobs:
-  run-docker:
+  build-and-run-docker:
     runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        
+      - name: Check if Docker is installed
+        run: |
+          if ! command -v docker &> /dev/null
+          then
+            echo "Docker is not installed. Installing Docker."
+            sudo apt-get update
+            sudo apt-get install -y docker.io
+          else
+            echo "Docker is already installed."
+          fi
+        
+      - name: Check if Docker image exists locally
+        run: |
+          if ! docker image inspect sncf_analysis &> /dev/null; then
+            echo "Docker image does not exist. Building the image."
+            docker build -t sncf_analysis .
+          else
+            echo "Docker image exists. Skipping build."
+          fi
+
       - name: Check if container is running
         run: |
           if [ "$(docker ps -q -f name=sncf_analysis_container)" ]; then
@@ -19,5 +41,5 @@ jobs:
             docker start sncf_analysis_container
           else
             echo "Container does not exist. Creating and starting a new container."
-            docker run -d --name sncf_analysis_container sncf_analysis
+            docker run -d --name sncf_analysis_container sncf_analysis  # Utilise l'image Docker
           fi
