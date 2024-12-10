@@ -2,7 +2,7 @@ name: Run Docker Task
 
 on:
   schedule:
-    - cron: '05 10 * * *' # Planifie à 10h05 UTC chaque jour
+    - cron: '55 09 * * *' # Planifie à 10h05 UTC chaque jour
 
 jobs:
   run-docker:
