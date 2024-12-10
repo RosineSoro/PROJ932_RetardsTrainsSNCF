@@ -1,0 +1,23 @@
+name: Run Docker Task
+
+on:
+  schedule:
+    - cron: '05 10 * * *' # Planifie à 10h05 UTC chaque jour
+
+jobs:
+  run-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Check if container is running
+        run: |
+          if [ "$(docker ps -q -f name=sncf_analysis_container)" ]; then
+            echo "Container is already running."
+          elif [ "$(docker ps -aq -f name=sncf_analysis_container)" ]; then
+            echo "Container exists but is stopped. Restarting it."
+            docker start sncf_analysis_container
+          else
+            echo "Container does not exist. Creating and starting a new container."
+            docker run -d --name sncf_analysis_container sncf_analysis
+          fi
