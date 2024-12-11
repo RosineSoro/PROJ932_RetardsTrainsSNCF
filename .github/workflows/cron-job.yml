@@ -2,7 +2,7 @@ name: Run Docker Task
 
 on:
   schedule:
-    - cron: '59 19 * * *'  # Planifie à 10h05 UTC chaque jour
+    - cron: '02 20 * * *'  # Planifie à 10h05 UTC chaque jour
 
 jobs:
   build-and-run-docker:
@@ -45,16 +45,16 @@ jobs:
           fi
 
          
-    - name: Retrieve CSV files from container
-      run: |
+      - name: Retrieve CSV files from container
+        run: |
         if ls ./output/*.csv 1> /dev/null 2>&1; then
           echo "CSV files generated successfully."
         else
           echo "No CSV files generated."
         fi
 
-    - name: Upload CSV files as artifacts
-      uses: actions/upload-artifact@v3
-      with:
+      - name: Upload CSV files as artifacts
+        uses: actions/upload-artifact@v3
+        with:
         name: sncf_results
         path: ./output/*.csv  # Upload all CSV files generated
